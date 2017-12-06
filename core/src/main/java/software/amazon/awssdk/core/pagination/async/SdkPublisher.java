@@ -13,21 +13,20 @@
  * permissions and limitations under the License.
  */
 
-package software.amazon.awssdk.codegen.utils;
+package software.amazon.awssdk.core.pagination.async;
 
-import software.amazon.awssdk.annotations.ReviewBeforeRelease;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import org.reactivestreams.Publisher;
 
-public final class PaginatorUtils {
+/**
+ * Interface that is implemented by the Async auto-paginated responses.
+ */
+public interface SdkPublisher<T> extends Publisher<T> {
 
-    private PaginatorUtils() {
-    }
-
-    /**
-     * @param methodName Name of a method in sync client
-     * @return the name of the auto-pagination enabled operation
-     */
-    @ReviewBeforeRelease("Naming of paginated APIs")
-    public static String getPaginatedMethodName(String methodName) {
-        return methodName + "Paginator";
+    default CompletableFuture<Void> forEach(Consumer<T> consumer) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        subscribe(new SequentialSubscriber<>(consumer, future));
+        return future;
     }
 }

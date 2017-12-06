@@ -204,7 +204,7 @@ class SyncOperationDocProvider extends OperationDocProvider {
     }
 
     /**
-     * Provider for standard paginated method that that takes in a request object and returns a response object.
+     * Provider for standard paginated method that takes in a request object and returns a response object.
      */
     private static class SyncPaginated extends SyncOperationDocProvider {
 
@@ -214,7 +214,7 @@ class SyncOperationDocProvider extends OperationDocProvider {
 
         @Override
         protected String appendToDescription() {
-            return opModel.isPaginated() ? paginationDocs.getDocsForSyncOperation() : null;
+            return opModel.isPaginated() ? paginationDocs.getDocsForSyncOperation() : "";
         }
     }
 
@@ -230,7 +230,7 @@ class SyncOperationDocProvider extends OperationDocProvider {
         @Override
         protected void applyParams(DocumentationBuilder docBuilder) {
             // Link to non-simple method for discoverability
-            docBuilder.see("#%s(%s)", PaginatorUtils.getSyncMethodName(opModel.getMethodName()),
+            docBuilder.see("#%s(%s)", PaginatorUtils.getPaginatedMethodName(opModel.getMethodName()),
                            opModel.getInput().getVariableType());
         }
     }
