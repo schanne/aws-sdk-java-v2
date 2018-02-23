@@ -130,7 +130,7 @@ public final class AsyncClientClass extends AsyncClientInterface {
     }
 
     @Override
-    protected MethodSpec.Builder paginatedTraditionalMethodBody(MethodSpec.Builder builder, OperationModel opModel) {
+    protected MethodSpec.Builder paginatedMethodBody(MethodSpec.Builder builder, OperationModel opModel) {
         return builder.addModifiers(Modifier.PUBLIC)
                       .addStatement("return new $T(this, $L)",
                                     poetExtensions.getResponseClassForPaginatedAsyncOperation(opModel.getOperationName()),

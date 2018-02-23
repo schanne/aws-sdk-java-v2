@@ -162,10 +162,10 @@ public class AsyncClientInterface implements ClassSpec {
                                                                            ClientType.ASYNC,
                                                                            SimpleMethodOverload.PAGINATED));
 
-        return paginatedTraditionalMethodBody(builder, opModel).build();
+        return paginatedMethodBody(builder, opModel).build();
     }
 
-    protected MethodSpec.Builder paginatedTraditionalMethodBody(MethodSpec.Builder builder, OperationModel operationModel) {
+    protected MethodSpec.Builder paginatedMethodBody(MethodSpec.Builder builder, OperationModel operationModel) {
         return builder.addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
                       .addStatement("throw new $T()", UnsupportedOperationException.class);
     }

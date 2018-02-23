@@ -18,6 +18,7 @@ package software.amazon.awssdk.codegen.emitters.tasks;
 import static software.amazon.awssdk.utils.FunctionalUtils.safeFunction;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,27 +47,21 @@ public class PaginatorsGeneratorTasks extends BaseGeneratorTasks {
 
     @Override
     protected List<GeneratorTask> createTasks() throws Exception {
-        info("Emitting paginator classes");
-        return Stream.concat(createSyncTasks(), createASyncTasks())
-                     .collect(Collectors.toList());
-    }
-
-    private Stream<GeneratorTask> createSyncTasks() {
         return model.getPaginators().entrySet().stream()
                     .filter(entry -> entry.getValue().isValid())
-                    .map(safeFunction(this::createSyncTask));
+                    .flatMap(safeFunction(this::createSyncAndAsyncTasks))
+                    .collect(Collectors.toList());
+    }
+
+    private Stream<GeneratorTask> createSyncAndAsyncTasks(Map.Entry<String, PaginatorDefinition> entry) throws IOException {
+        return Arrays.asList(createSyncTask(entry), createAsyncTask(entry))
+                     .stream();
     }
 
     private GeneratorTask createSyncTask(Map.Entry<String, PaginatorDefinition> entry) throws IOException {
         ClassSpec classSpec = new SyncResponseClassSpec(model, entry.getKey(), entry.getValue());
 
         return new PoetGeneratorTask(paginatorsClassDir, model.getFileHeader(), classSpec);
-    }
-
-    private Stream<GeneratorTask> createASyncTasks() {
-        return model.getPaginators().entrySet().stream()
-                    .filter(entry -> entry.getValue().isValid())
-                    .map(safeFunction(this::createAsyncTask));
     }
 
     private GeneratorTask createAsyncTask(Map.Entry<String, PaginatorDefinition> entry) throws IOException {
