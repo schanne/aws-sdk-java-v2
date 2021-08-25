@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.reactivestreams</groupId>
             <artifactId>reactive-streams</artifactId>
-            <version>1.0.0.final</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
